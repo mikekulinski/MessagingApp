@@ -12,14 +12,14 @@ struct CellView: View {
     var contact:Contact
     var body: some View {
         HStack {
-            VStack{
-                Image(contact.imageName)
-                .resizable()
-                .scaledToFill()
-            }
+            Image(contact.imageName)
+            .resizable()
+            .scaledToFill()
             .clipShape(Circle())
             .frame(width: 75, height: 75)
+            
             Text(contact.name)
+            .bold()
             .padding()
         }
     }

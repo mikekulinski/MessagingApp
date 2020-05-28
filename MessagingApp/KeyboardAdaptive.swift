@@ -10,28 +10,28 @@ import SwiftUI
 import Foundation
 import Combine
 
+// Keep track of the keyboard's height in Publishers
 extension Publishers {
-    // 1.
     static var keyboardHeight: AnyPublisher<CGFloat, Never> {
-        // 2.
         let willShow = NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)
             .map { $0.keyboardHeight }
         
         let willHide = NotificationCenter.default.publisher(for: UIApplication.keyboardWillHideNotification)
             .map { _ in CGFloat(0) }
         
-        // 3.
         return MergeMany(willShow, willHide)
             .eraseToAnyPublisher()
     }
 }
 
+// Allows for us to update the keyboard height when the keyboard moves
 extension Notification {
     var keyboardHeight: CGFloat {
         return (userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0
     }
 }
 
+// Creates a new modifer for a view so it will move out of the way of the keyboard
 struct KeyboardAdaptive: ViewModifier {
     @State private var keyboardHeight: CGFloat = 0
 
@@ -42,6 +42,7 @@ struct KeyboardAdaptive: ViewModifier {
     }
 }
 
+// Extends the View with this new modifier
 extension View {
     func keyboardAdaptive() -> some View {
         ModifiedContent(content: self, modifier: KeyboardAdaptive())
