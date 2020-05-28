@@ -9,8 +9,35 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var contacts:[Contact] = allContacts
+    
+    func addContact() {
+        contacts.append(Contact(name: "New Thread", imageName: ""))
+    }
+    
+    
     var body: some View {
-        Text("Hello, World!")
+        NavigationView {
+            VStack {
+                List(contacts) { contact in
+                    NavigationLink(destination: DetailView(contact:contact)) {
+                        CellView(contact: contact)
+                    }
+                }
+                .navigationBarTitle("", displayMode: .inline)
+                .navigationBarItems(
+                    leading: Text("Messages").font(.largeTitle).bold(),
+                    trailing: Button(action: {
+                        self.addContact()
+                    }) {
+                        Image(systemName: "square.and.pencil")
+                    }
+                )
+            }
+            
+        
+
+        }
     }
 }
 
